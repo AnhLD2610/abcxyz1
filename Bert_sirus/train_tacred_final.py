@@ -149,7 +149,7 @@ class Manager(object):
         relationid2_clustercentroids = {}
 
 
-        
+        time_cluster = 0 
         for i in range(epoch):     
             start_time = time.time()
 
@@ -179,7 +179,12 @@ class Manager(object):
                         hidden_des = hidden_des.detach().cpu().data
                         rep_seen_des.append(hidden_des)
                     rep_seen_des = torch.cat(rep_seen_des, dim=0)
+
+                    start_time_cluster = time.time()
                     clusters, clusters_centroids = self.get_cluster_and_centroids(rep_seen_des)
+                    end_time_cluster = time.time()
+                    time_cluster += end_time_cluster - start_time_cluster
+
                 flag = 0
                 if len(clusters) == max(clusters) + 1:
                     flag = 1
@@ -256,6 +261,7 @@ class Manager(object):
             end_time = time.time()
             epoch_time = end_time - start_time
             print(f"Time for one epoch: {epoch_time:.2f} seconds")
+            print(f"Time for one epoch: {time_cluster:.2f} seconds")
 
         print('')             
 
